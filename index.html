@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Integration Selector Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="glow-orb" id="orb-1"></div>
+    <div class="glow-orb" id="orb-2"></div>
+
+    <header class="app-header">
+        <div class="logo-area">
+            <span class="logo-icon">∫</span>
+            <h1>ML Integration Selector</h1>
+        </div>
+        <nav class="app-nav">
+            <button class="nav-btn active" data-tab="overview">Overview & Metrics</button>
+            <button class="nav-btn" data-tab="features">Mathematical Features</button>
+            <button class="nav-btn" data-tab="rules">Decision Rules</button>
+            <button class="nav-btn" data-tab="sandbox">Interactive Sandbox</button>
+        </nav>
+    </header>
+
+    <main class="app-content">
+        <!-- Overview & Metrics Tab -->
+        <section id="tab-overview" class="tab-pane active">
+            <div class="hero-card">
+                <h2>Solver Selection via Machine Learning</h2>
+                <p>This project uses machine learning (Random Forests) to analyze function attributes and automatically select the optimal numerical integration algorithm. It avoids the computational overhead of trying multiple solvers or risking failure due to hidden singularities, step functions, or high dimensional scaling.</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Total Functions Generated</span>
+                    <span class="metric-value" id="val-total-functions">600</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Dataset Generation Time</span>
+                    <span class="metric-value" id="val-gen-time">0.50s</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Model Training Time</span>
+                    <span class="metric-value" id="val-train-time">0.42s</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Total Execution Time</span>
+                    <span class="metric-value" id="val-total-time">1.01s</span>
+                </div>
+            </div>
+
+            <div class="accuracy-section">
+                <div class="accuracy-card">
+                    <div class="accuracy-header">
+                        <h3>Decision Tree</h3>
+                        <span class="badge dt-badge">Baseline</span>
+                    </div>
+                    <div class="accuracy-gauge">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle-bg" stroke="#1f293d" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            <circle class="progress-ring-circle" id="gauge-dt" stroke="#a78bfa" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.15" stroke-dashoffset="314.15"/>
+                        </svg>
+                        <div class="gauge-percentage" id="val-dt-accuracy">47.3%</div>
+                    </div>
+                    <p class="accuracy-description">Simple flow chart with maximum depth of 4. Highly interpretable but lacks ensemble generalization.</p>
+                </div>
+
+                <div class="accuracy-card premium">
+                    <div class="accuracy-header">
+                        <h3>Random Forest</h3>
+                        <span class="badge rf-badge">Best Model</span>
+                    </div>
+                    <div class="accuracy-gauge">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle-bg" stroke="#1f293d" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            <circle class="progress-ring-circle" id="gauge-rf" stroke="#3b82f6" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.15" stroke-dashoffset="314.15"/>
+                        </svg>
+                        <div class="gauge-percentage" id="val-rf-accuracy">55.3%</div>
+                    </div>
+                    <p class="accuracy-description">100 Trees ensemble model. Achieves a 2.2x improvement over the 25% random guessing baseline.</p>
+                </div>
+            </div>
+
+            <div class="visualization-container">
+                <div class="visualization-tabs">
+                    <h3>Empirical Results & Visualizations</h3>
+                    <div class="vis-btn-group">
+                        <button class="vis-tab-btn active" data-img="figures/feature_importances.png">Feature Importances</button>
+                        <button class="vis-tab-btn" data-img="figures/confusion_matrix.png">Confusion Matrix</button>
+                        <button class="vis-tab-btn" data-img="figures/decision_boundary.png">Decision Boundaries</button>
+                    </div>
+                </div>
+                <div class="visualization-view">
+                    <img id="vis-display" src="figures/feature_importances.png" alt="Project Visualization Graph">
+                </div>
+            </div>
+        </section>
+
+        <!-- Mathematical Features Tab -->
+        <section id="tab-features" class="tab-pane">
+            <h2 class="section-title">The 18 Mathematical Features</h2>
+            <p class="section-intro">To classify equations without inspecting their formulas, we probe each function numerically at 500 points in the hyperrectangular domain $[a, b]^d$. Here is the glossary of features our model uses:</p>
+            
+            <div class="features-list-grid">
+                <div class="feature-detail-card">
+                    <h4>dim</h4>
+                    <span class="feat-type">Basic Structure</span>
+                    <p>The dimension ($d$) of the integration domain, ranging from 1 to 5. Primary indicator of grid method scaling limitations.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>volume</h4>
+                    <span class="feat-type">Basic Structure</span>
+                    <p>The total hyper-volume of the domain, computed as the product of boundary widths $\prod_{j=1}^d (b_j - a_j)$.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>mean_y</h4>
+                    <span class="feat-type">Function Statistics</span>
+                    <p>The average value of the function evaluations across the sampled points in the domain.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>std_y</h4>
+                    <span class="feat-type">Function Statistics</span>
+                    <p>The standard deviation of function values. Measures the overall fluctuation of the function.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>range_y</h4>
+                    <span class="feat-type">Function Statistics</span>
+                    <p>The span between the maximum and minimum values of the function: $y_{max} - y_{min}$.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>std_range_ratio</h4>
+                    <span class="feat-type">Function Statistics</span>
+                    <p>The ratio of standard deviation to range. Highlights ruggedness: high values indicate persistent fluctuations rather than flat regions with minor bumps.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>min_abs_y / max_abs_y</h4>
+                    <span class="feat-type">Function Statistics</span>
+                    <p>The minimum and maximum absolute values of the function. Useful for identifying scaling behaviors.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>mean_abs_df</h4>
+                    <span class="feat-type">Smoothness (First Derivative)</span>
+                    <p>The average magnitude of the first derivative estimated along coordinate axes using central differences.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>max_abs_df</h4>
+                    <span class="feat-type">Smoothness (First Derivative)</span>
+                    <p>The maximum absolute first derivative. Detects steep slopes or edges.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>mean_abs_d2f</h4>
+                    <span class="feat-type">Smoothness (Second Derivative)</span>
+                    <p>The average magnitude of the second derivative. Measures curvature and local oscillations.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>max_abs_d2f</h4>
+                    <span class="feat-type">Smoothness (Second Derivative)</span>
+                    <p>The maximum absolute second derivative. Captures localized severe changes in curvature.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>d2f_to_df_ratio</h4>
+                    <span class="feat-type">Smoothness (Derivatives)</span>
+                    <p>The ratio of second derivative mean magnitude to first derivative mean magnitude. Indicates curvature severity relative to slope.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>max_to_mean_df</h4>
+                    <span class="feat-type">Smoothness (Derivatives)</span>
+                    <p>Ratio of maximum slope to average slope. Large ratios indicate sudden, steep steps or kinks in an otherwise flatter function.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>max_to_mean_d2f</h4>
+                    <span class="feat-type">Smoothness (Derivatives)</span>
+                    <p>Ratio of maximum curvature to average curvature. **Most important feature (13.1%)** for detecting local kinks that break high-order integration methods like Romberg.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>extrema_count</h4>
+                    <span class="feat-type">Oscillations</span>
+                    <p>The number of local extrema (valleys and peaks) detected along a 1D diagonal slice. Counts sign changes in the first derivative.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>mean_boundary_diff</h4>
+                    <span class="feat-type">Periodicity</span>
+                    <p>The average difference between function values at the lower and upper bounds. Helpful for finding periodic behaviors.</p>
+                </div>
+                <div class="feature-detail-card">
+                    <h4>has_singularity</h4>
+                    <span class="feat-type">Singularities</span>
+                    <p>A binary flag set to 1 if evaluated values exceed $10^4$ or derivatives exceed $10^6$, indicating potential divisions by zero.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Rules Tab -->
+        <section id="tab-rules" class="tab-pane">
+            <h2 class="section-title">Extracted Decision Tree Regimes</h2>
+            <p class="section-intro">Here is the decision hierarchy learned by the model to determine the best integration method. This structure shows the exact rules split at each node:</p>
+
+            <div class="rules-tree-card">
+                <div class="tree-node root">
+                    <div class="node-condition">Is Dimension &le; 3.5? (Low Dimension)</div>
+                    <div class="node-children">
+                        <div class="tree-node left">
+                            <div class="node-condition">Is Smoothness Ratio (max_to_mean_d2f) &le; 22.28? (Smooth Function)</div>
+                            <div class="node-children">
+                                <div class="tree-node left">
+                                    <div class="node-condition">Is curvature-to-slope ratio &le; 0.10? (Gentle slopes)</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-simp">
+                                            <span class="label">If boundary difference &le; 1.16:</span>
+                                            <strong>Simpson's Rule</strong>
+                                        </div>
+                                        <div class="leaf-node class-trap">
+                                            <span class="label">If boundary difference > 1.16:</span>
+                                            <strong>Trapezoidal Rule</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node right">
+                                    <div class="node-condition">Is curvature-to-slope ratio > 0.10? (Curved profile)</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-romberg">
+                                            <span class="label">If Dimension &le; 2.5 (1D or 2D):</span>
+                                            <strong>Romberg Integration</strong> (highly efficient)
+                                        </div>
+                                        <div class="leaf-node class-simp">
+                                            <span class="label">If Dimension > 2.5 (3D):</span>
+                                            <strong>Simpson's Rule</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tree-node right">
+                            <div class="node-condition">Is Smoothness Ratio (max_to_mean_d2f) > 22.28? (Sharp Spikes or Kinks)</div>
+                            <div class="node-children">
+                                <div class="tree-node left">
+                                    <div class="node-condition">Is boundary difference &le; 1.18?</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-mc">
+                                            <span class="label">If average slope &le; 0.42:</span>
+                                            <strong>Monte Carlo</strong>
+                                        </div>
+                                        <div class="leaf-node class-romberg">
+                                            <span class="label">If average slope > 0.42:</span>
+                                            <strong>Romberg Integration</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node right">
+                                    <div class="leaf-node class-mc">
+                                        <span class="label">If boundary difference > 1.18:</span>
+                                        <strong>Monte Carlo</strong> (handles sudden drops best)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tree-node root secondary">
+                    <div class="node-condition">Is Dimension > 3.5? (High Dimension)</div>
+                    <div class="node-children">
+                        <div class="tree-node left">
+                            <div class="node-condition">Is boundary difference &le; 0.52? (Mostly periodic boundaries)</div>
+                            <div class="node-children">
+                                <div class="tree-node left">
+                                    <div class="node-condition">Is average curvature &le; 0.74?</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-simp">
+                                            <span class="label">If max curvature &le; 1.38:</span>
+                                            <strong>Simpson's Rule</strong>
+                                        </div>
+                                        <div class="leaf-node class-mc">
+                                            <span class="label">If max curvature > 1.38:</span>
+                                            <strong>Monte Carlo</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node right">
+                                    <div class="node-condition">Is average curvature > 0.74?</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-trap">
+                                            <span class="label">If minimum absolute Y &le; 0.00:</span>
+                                            <strong>Trapezoidal Rule</strong>
+                                        </div>
+                                        <div class="leaf-node class-simp">
+                                            <span class="label">If minimum absolute Y > 0.00:</span>
+                                            <strong>Simpson's Rule</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tree-node right">
+                            <div class="node-condition">Is boundary difference > 0.52?</div>
+                            <div class="node-children">
+                                <div class="tree-node left">
+                                    <div class="node-condition">Is ruggedness ratio (std_range_ratio) &le; 0.20? (Low variance)</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-mc">
+                                            <span class="label">If extrema count &le; 4.5:</span>
+                                            <strong>Monte Carlo</strong>
+                                        </div>
+                                        <div class="leaf-node class-trap">
+                                            <span class="label">If extrema count > 4.5:</span>
+                                            <strong>Trapezoidal Rule</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node right">
+                                    <div class="node-condition">Is ruggedness ratio (std_range_ratio) > 0.20?</div>
+                                    <div class="node-children">
+                                        <div class="leaf-node class-romberg">
+                                            <span class="label">If Dimension &le; 4.5 (4D):</span>
+                                            <strong>Romberg Integration</strong>
+                                        </div>
+                                        <div class="leaf-node class-mc">
+                                            <span class="label">If Dimension > 4.5 (5D):</span>
+                                            <strong>Monte Carlo</strong> (grid methods fail)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Sandbox Tab -->
+        <section id="tab-sandbox" class="tab-pane">
+            <h2 class="section-title">Function Simulation Sandbox</h2>
+            <p class="section-intro">Design a custom function in real time. We will generate the function, numerically extract its 18 features in JavaScript (using 500 samples), feed them to the model's Decision Tree rules, and display which solver is recommended!</p>
+
+            <div class="sandbox-layout">
+                <!-- Sandbox Config Form -->
+                <div class="sandbox-card config-card">
+                    <h3>1. Design the Function</h3>
+                    <form id="sandbox-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fn-dim">Dimension ($d$)</label>
+                                <select id="fn-dim">
+                                    <option value="1">1D Function</option>
+                                    <option value="2" selected>2D Function</option>
+                                    <option value="3">3D Function</option>
+                                    <option value="4">4D Function</option>
+                                    <option value="5">5D Function</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fn-structure">Structure</label>
+                                <select id="fn-structure">
+                                    <option value="separable" selected>Separable (Term1 * Term2)</option>
+                                    <option value="additive">Additive (Term1 + Term2)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fn-bounds-min">Domain Min ($a_j$)</label>
+                                <input type="number" id="fn-bounds-min" value="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="fn-bounds-max">Domain Max ($b_j$)</label>
+                                <input type="number" id="fn-bounds-max" value="1" step="0.1">
+                            </div>
+                        </div>
+
+                        <div class="term-config-box">
+                            <h4>Component 1 (Axis 1 / Axis 2 / etc.)</h4>
+                            <div class="form-group">
+                                <label for="comp1-type">Type</label>
+                                <select id="comp1-type">
+                                    <option value="poly">Polynomial (x^p)</option>
+                                    <option value="exp">Exponential (e^{c*x})</option>
+                                    <option value="trig" selected>Trigonometric (sin(c*x))</option>
+                                    <option value="abs">Absolute Value (|x - xc|)</option>
+                                    <option value="step">Step Function (Heaviside)</option>
+                                    <option value="singular">Singular (1 / sqrt(x - a + eps))</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="comp1-coeff">Coeff</label>
+                                    <input type="number" id="comp1-coeff" value="1.0" step="0.1">
+                                </div>
+                                <div class="form-group" id="comp1-param-group">
+                                    <label for="comp1-param" id="comp1-param-label">Freq / Param (c)</label>
+                                    <input type="number" id="comp1-param" value="3.14" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="term-config-box">
+                            <h4>Component 2 (Axis 2 / Axis 3 / etc.)</h4>
+                            <div class="form-group">
+                                <label for="comp2-type">Type</label>
+                                <select id="comp2-type">
+                                    <option value="poly" selected>Polynomial (x^p)</option>
+                                    <option value="exp">Exponential (e^{c*x})</option>
+                                    <option value="trig">Trigonometric (sin(c*x))</option>
+                                    <option value="abs">Absolute Value (|x - xc|)</option>
+                                    <option value="step">Step Function (Heaviside)</option>
+                                    <option value="singular">Singular (1 / sqrt(x - a + eps))</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="comp2-coeff">Coeff</label>
+                                    <input type="number" id="comp2-coeff" value="1.0" step="0.1">
+                                </div>
+                                <div class="form-group" id="comp2-param-group">
+                                    <label for="comp2-param" id="comp2-param-label">Exponent (p)</label>
+                                    <input type="number" id="comp2-param" value="2" step="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btn-simulate" class="btn-primary">Generate & Analyze</button>
+                    </form>
+                </div>
+
+                <!-- Sandbox Output View -->
+                <div class="sandbox-card results-card">
+                    <h3>2. Analysis & Predictions</h3>
+                    <div id="sandbox-default-message" class="info-message">
+                        Select parameters and click "Generate & Analyze" to calculate features and predict.
+                    </div>
+                    <div id="sandbox-output" class="hidden">
+                        <div class="recommendation-box">
+                            <span class="rec-title">Recommended Solver:</span>
+                            <span id="predicted-solver" class="solver-name">Romberg Integration</span>
+                            <div id="solver-reason" class="solver-explanation">This selection aligns with low dimensions and low curvature.</div>
+                        </div>
+
+                        <h4>Key Features Extracted (Live JS)</h4>
+                        <div class="extracted-features-grid">
+                            <div class="feature-item">
+                                <span class="lbl">dim</span>
+                                <span class="val" id="feat-val-dim">2.0</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">range_y</span>
+                                <span class="val" id="feat-val-range_y">1.50</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">std_range_ratio</span>
+                                <span class="val" id="feat-val-std_range_ratio">0.31</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">max_to_mean_d2f</span>
+                                <span class="val" id="feat-val-max_to_mean_d2f">2.41</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">d2f_to_df_ratio</span>
+                                <span class="val" id="feat-val-d2f_to_df_ratio">0.82</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">mean_boundary_diff</span>
+                                <span class="val" id="feat-val-mean_boundary_diff">0.12</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">extrema_count</span>
+                                <span class="val" id="feat-val-extrema_count">2</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="lbl">has_singularity</span>
+                                <span class="val" id="feat-val-has_singularity">0.0</span>
+                            </div>
+                        </div>
+
+                        <h4>Analytical Formula Reference</h4>
+                        <div class="formula-box" id="formula-desc">
+                            f(x_1, x_2) = (1.0 * sin(3.14 * x_1)) * (1.0 * x_2^2)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 BSIT 400 - Numerical Methods & ML Integration Selection</p>
+    </footer>
+
+    <!-- App Scripts -->
+    <script src="script.js"></script>
+    <script src="sandbox.js"></script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
   "total_functions_generated": 600,
-  "dataset_generation_time_s": 0.4986419677734375,
-  "model_training_time_s": 0.4180290699005127,
-  "total_project_execution_time_s": 0.9177672863006592,
+  "dataset_generation_time_s": 0.4979851245880127,
+  "model_training_time_s": 0.5107841491699219,
+  "total_project_execution_time_s": 1.0111260414123535,
   "decision_tree_accuracy": 0.47333333333333333,
   "random_forest_accuracy": 0.5533333333333333,
   "feature_names": [
